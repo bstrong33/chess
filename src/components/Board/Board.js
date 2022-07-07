@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import startingBoard from "../../startingBoardData";
 
+import "./Board.css";
+
 function Board() {
   const [squares, setSquares] = useState(startingBoard);
 
@@ -61,6 +63,7 @@ function Board() {
       <button
         key={square.id}
         className={(square.column + square.row) % 2 === 0 ? "green" : "white"}
+        id={square.selected ? "selected" : null}
         onClick={() => updateBoard(square.id)}
       >
         {square.hasPiece ? square.piece : null}

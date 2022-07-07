@@ -3,25 +3,3 @@
   justify-content: center;
   margin-top: 100px;
 }
-
-button {
-  height: 50px;
-  width: 50px;
-  border: none;
-}
-
-.Board {
-  display: grid;
-  grid-template-columns: repeat(8, 0fr);
-  border: 2px solid;
-  padding: 0px;
-  justify-content: center;
-}
-
-.green {
-  background-color: green;
-}
-
-.white {
-  background-color: white;
-}
