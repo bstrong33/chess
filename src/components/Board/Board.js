@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import startingBoard from "../../startingBoardData";
+import _ from "lodash";
 
 import "./Board.css";
 
@@ -14,10 +15,11 @@ function Board() {
 
   const [capturedPieces, setCapturedPieces] = useState([]);
 
-  // useEffect(() => {
-  //   console.log(squares);
-  //   console.log(capturedPieces);
-  // }, [squares]);
+  useEffect(() => {
+    // console.log(squares);
+    // console.log(capturedPieces);
+    console.log(selectedPiece);
+  }, [squares]);
 
   // Runs all movement for board
   function updateBoard(index) {
@@ -39,6 +41,8 @@ function Board() {
 
   // Function for selecting a piece
   function selectPiece(index) {
+    let { piece, column, row, id, color, hasMoved } = squares[index];
+
     // Sets the "selected" property for the piece to true
     const newState = squares.map((obj) => {
       if (obj.id === index) {
@@ -50,11 +54,17 @@ function Board() {
     // Updates state that a piece has been selected as well as the type of piece that has been selected
     setSquares(newState);
     setIsPieceSelected(true);
-    setSelectedPiece(squares[index].piece);
+    setSelectedPiece({ piece, column, row, id, color, hasMoved });
+    // setSelectedPiece(squares[index].piece);
   }
 
   // Logic for moving a piece implemented
   function movePiece(index) {
+    if (!checkPieceMovement(index)) {
+      console.log("Not a legal move");
+      return;
+    }
+
     // Checks if the square being moved to has a piece of the opposite color, if so it pushes this captured piece to state and moves the new piece to this square
     const newState = squares.map((obj) => {
       if (
@@ -65,7 +75,7 @@ function Board() {
         setCapturedPieces((prevState) => [...prevState, obj]);
         return {
           ...obj,
-          piece: selectedPiece,
+          piece: selectedPiece.piece,
           hasPiece: true,
           hasMoved: true,
           color: colorTurn,
@@ -76,7 +86,7 @@ function Board() {
       if (obj.id === index && obj.hasPiece === false && obj.color === "") {
         return {
           ...obj,
-          piece: selectedPiece,
+          piece: selectedPiece.piece,
           hasPiece: true,
           hasMoved: true,
           color: colorTurn,
@@ -97,6 +107,44 @@ function Board() {
     setIsPieceSelected(false);
     setSelectedPiece("");
     setColorTurn((prevState) => (prevState === "white" ? "black" : "white"));
+  }
+
+  function checkPieceMovement(index) {
+    let newSquareColumn = parseInt(squares[index].column);
+    let newSquareRow = squares[index].row;
+    let pieceColumn = parseInt(selectedPiece.column);
+    let pieceRow = selectedPiece.row;
+
+    let piece = selectedPiece.piece;
+    if (piece === "pawn") {
+      return pawnMovement(
+        index,
+        newSquareColumn,
+        newSquareRow,
+        pieceColumn,
+        pieceRow
+      );
+    } else if (piece === "knight") {
+    } else if (piece === "bishop") {
+    } else if (piece === "rook") {
+    } else if (piece === "queen") {
+    } else if (piece === "king") {
+    }
+  }
+
+  function pawnMovement(
+    index,
+    newSquareColumn,
+    newSquareRow,
+    pieceColumn,
+    pieceRow
+  ) {
+    // console.log(_.isEqual(newSquareColumn, pieceColumn));
+    if (newSquareColumn === pieceColumn) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   const mappedSquares = squares.map((square) => {
