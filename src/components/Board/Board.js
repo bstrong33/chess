@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import startingBoard from "../../startingBoardData";
-import _ from "lodash";
+import PawnMovement from "../PieceMovement/PawnMovement";
+import KnightMovement from "../PieceMovement/KnightMovement";
+import RookMovement from "../PieceMovement/RookMovement";
+import KingMovement from "../PieceMovement/KingMovement";
 
 import "./Board.css";
 
@@ -17,7 +20,7 @@ function Board() {
 
   useEffect(() => {
     // console.log(squares);
-    console.log(capturedPieces);
+    // console.log(capturedPieces);
     // console.log(selectedPiece);
   }, [squares]);
 
@@ -116,133 +119,38 @@ function Board() {
     let pieceRow = selectedPiece.row;
     let pieceColor = selectedPiece.color;
     let pieceMoved = selectedPiece.hasMoved;
+    let columnDiff = Math.abs(newSquareColumn - pieceColumn);
+    let rowDiff = Math.abs(newSquareRow - pieceRow);
 
     let piece = selectedPiece.piece;
     if (piece === "pawn") {
-      return pawnMovement(
+      return PawnMovement(
         index,
         newSquareColumn,
         newSquareRow,
         pieceColumn,
         pieceRow,
         pieceColor,
-        pieceMoved
+        pieceMoved,
+        squares
       );
     } else if (piece === "knight") {
-      return true;
+      return KnightMovement(columnDiff, rowDiff);
     } else if (piece === "bishop") {
     } else if (piece === "rook") {
+      return RookMovement(
+        newSquareColumn,
+        newSquareRow,
+        pieceColumn,
+        pieceRow,
+        squares,
+        columnDiff,
+        rowDiff
+      );
     } else if (piece === "queen") {
     } else if (piece === "king") {
+      return KingMovement(columnDiff, rowDiff);
     }
-  }
-
-  function pawnMovement(
-    index,
-    newSquareColumn,
-    newSquareRow,
-    pieceColumn,
-    pieceRow,
-    pieceColor,
-    pieceMoved
-  ) {
-    // Checks color of the pawn, makes sure the pawn stays in the same column, and can't move to a square that has a piece already
-    if (pieceColor === "white") {
-      if (
-        pieceMoved &&
-        newSquareRow - 1 === pieceRow &&
-        newSquareColumn === pieceColumn &&
-        squares[index].hasPiece === false
-      ) {
-        return true;
-      } else if (
-        !pieceMoved &&
-        newSquareRow === 3 &&
-        newSquareColumn === pieceColumn &&
-        squares[index].hasPiece === false
-      ) {
-        return true;
-      } else if (
-        !pieceMoved &&
-        newSquareRow === 4 &&
-        newSquareColumn === pieceColumn &&
-        squares[index].hasPiece === false
-      ) {
-        let pieceInTheWay = false;
-        for (let i = 0; i < squares.length; i++) {
-          if (
-            squares[i].row === 3 &&
-            squares[i].column === pieceColumn &&
-            squares[i].hasPiece
-          ) {
-            pieceInTheWay = true;
-          }
-        }
-        return !pieceInTheWay;
-      } else if (
-        newSquareColumn - 1 === pieceColumn &&
-        newSquareRow - 1 === pieceRow &&
-        squares[index].hasPiece
-      ) {
-        return true;
-      } else if (
-        newSquareColumn + 1 === pieceColumn &&
-        newSquareRow - 1 === pieceRow &&
-        squares[index].hasPiece
-      ) {
-        return true;
-      }
-    } else if (pieceColor === "black") {
-      if (
-        pieceMoved &&
-        newSquareRow + 1 === pieceRow &&
-        newSquareColumn === pieceColumn &&
-        squares[index].hasPiece === false
-      ) {
-        return true;
-      } else if (
-        !pieceMoved &&
-        newSquareRow === 6 &&
-        newSquareColumn === pieceColumn &&
-        squares[index].hasPiece === false
-      ) {
-        return true;
-      } else if (
-        !pieceMoved &&
-        newSquareRow === 5 &&
-        newSquareColumn === pieceColumn &&
-        squares[index].hasPiece === false
-      ) {
-        let pieceInTheWay = false;
-        for (let i = 0; i < squares.length; i++) {
-          if (
-            squares[i].row === 6 &&
-            squares[i].column === pieceColumn &&
-            squares[i].hasPiece
-          ) {
-            pieceInTheWay = true;
-          }
-        }
-        return !pieceInTheWay;
-      } else if (
-        newSquareColumn - 1 === pieceColumn &&
-        newSquareRow + 1 === pieceRow &&
-        squares[index].hasPiece
-      ) {
-        return true;
-      } else if (
-        newSquareColumn + 1 === pieceColumn &&
-        newSquareRow + 1 === pieceRow &&
-        squares[index].hasPiece
-      ) {
-        return true;
-      }
-    }
-    // if (newSquareColumn === pieceColumn && newSquareRow - 1 === pieceRow) {
-    //   return true;
-    // } else {
-    //   return false;
-    // }
   }
 
   const mappedSquares = squares.map((square) => {
