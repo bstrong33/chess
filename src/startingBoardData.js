@@ -266,7 +266,7 @@ const startingBoard = [
   {
     id: 22,
     place: "G6",
-    hasPiece: true,
+    hasPiece: false,
     selected: false,
     hasMoved: false,
     color: "",

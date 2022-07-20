@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import startingBoard from "../../startingBoardData";
 import PawnMovement from "../PieceMovement/PawnMovement";
 import KnightMovement from "../PieceMovement/KnightMovement";
+import BishopMovement from "../PieceMovement/BishopMovement";
 import RookMovement from "../PieceMovement/RookMovement";
 import KingMovement from "../PieceMovement/KingMovement";
 
@@ -22,7 +23,7 @@ function Board() {
     // console.log(squares);
     // console.log(capturedPieces);
     // console.log(selectedPiece);
-  }, [squares]);
+  }, [squares, selectedPiece]);
 
   // Runs all movement for board
   function updateBoard(index) {
@@ -63,6 +64,7 @@ function Board() {
 
   // Logic for moving a piece implemented
   function movePiece(index) {
+    // console.log(squares);
     if (!checkPieceMovement(index)) {
       console.log("Not a legal move");
       return;
@@ -98,7 +100,13 @@ function Board() {
 
       // Reverts the square that the piece moved from to reflect no longer having a piece or being selected
       if (obj.hasPiece === true && obj.selected === true) {
-        return { ...obj, hasPiece: false, selected: false, color: "" };
+        return {
+          ...obj,
+          hasPiece: false,
+          selected: false,
+          color: "",
+          piece: "",
+        };
       }
 
       // All other squares remain the same
@@ -137,6 +145,15 @@ function Board() {
     } else if (piece === "knight") {
       return KnightMovement(columnDiff, rowDiff);
     } else if (piece === "bishop") {
+      return BishopMovement(
+        newSquareColumn,
+        newSquareRow,
+        pieceColumn,
+        pieceRow,
+        squares,
+        columnDiff,
+        rowDiff
+      );
     } else if (piece === "rook") {
       return RookMovement(
         newSquareColumn,
