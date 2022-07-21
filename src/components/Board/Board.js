@@ -4,6 +4,7 @@ import PawnMovement from "../PieceMovement/PawnMovement";
 import KnightMovement from "../PieceMovement/KnightMovement";
 import BishopMovement from "../PieceMovement/BishopMovement";
 import RookMovement from "../PieceMovement/RookMovement";
+import QueenMovement from "../PieceMovement/QueenMovement";
 import KingMovement from "../PieceMovement/KingMovement";
 
 import "./Board.css";
@@ -165,6 +166,15 @@ function Board() {
         rowDiff
       );
     } else if (piece === "queen") {
+      return QueenMovement(
+        newSquareColumn,
+        newSquareRow,
+        pieceColumn,
+        pieceRow,
+        squares,
+        columnDiff,
+        rowDiff
+      );
     } else if (piece === "king") {
       return KingMovement(columnDiff, rowDiff);
     }

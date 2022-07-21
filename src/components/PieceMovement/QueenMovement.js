@@ -1,4 +1,4 @@
-function BishopMovement(
+function QueenMovement(
   newSquareColumn,
   newSquareRow,
   pieceColumn,
@@ -39,6 +39,22 @@ function BishopMovement(
 
   for (let i = 0; i < squares.length; i++) {
     if (
+      columnDiff === 0 &&
+      pieceColumn === squares[i].column &&
+      squares[i].row > lowRow &&
+      squares[i].row < highRow &&
+      squares[i].hasPiece
+    ) {
+      pieceInTheWay = true;
+    } else if (
+      rowDiff === 0 &&
+      pieceRow === squares[i].row &&
+      squares[i].column > lowColumn &&
+      squares[i].column < highColumn &&
+      squares[i].hasPiece
+    ) {
+      pieceInTheWay = true;
+    } else if (
       squares[i].column > lowColumn &&
       squares[i].column < highColumn &&
       squares[i].row > lowRow &&
@@ -51,15 +67,15 @@ function BishopMovement(
     }
   }
 
-  //   console.log(
-  //     `columnDiff: ${columnDiff}, rowDiff: ${rowDiff}, lowColumn: ${lowColumn}, highColumn: ${highColumn}, lowRow: ${lowRow}, highRow: ${highRow}`
-  //   );
-
   if (pieceInTheWay) {
     return false;
+  } else if (columnDiff === 0) {
+    return true;
+  } else if (rowDiff === 0) {
+    return true;
   } else if (columnDiff === rowDiff) {
     return true;
   }
 }
 
-export default BishopMovement;
+export default QueenMovement;
